@@ -15,20 +15,14 @@ def search_fif_files(directory):
                 fif_file_paths.append(os.path.join(root, file))
     return fif_file_paths
 
-def analysis_meg(fif_path, selected_channels=None):
-    # Mở file .fif và tải dữ liệu
+def plot_meg(fif_path, selected_channels=None):
+
     raw = mne.io.read_raw_fif(fif_path, preload=True)
-    # In thông tin tóm tắt về dữ liệu
     print(raw.info)
 
     # Tạo tên file từ fif_path
     base_name = os.path.basename(fif_path)  # Lấy tên file từ đường dẫn
     file_name, _ = os.path.splitext(base_name)  # Tách tên file và phần mở rộng
-
-    # # Vẽ dữ liệu miền thời gian
-    # raw.plot(n_channels=5, scalings={'mag': 1e-12, 'grad': 4e-11, 'eeg': 1e-5}, title='Raw MEG Data', show=False)
-    # plt.savefig(f'{file_name}_raw_meg_data.png')  # Lưu hình ảnh vào tệp với tên dựa trên fif_path
-    # plt.close()  # Đóng hình ảnh để giải phóng bộ nhớ
 
     # Vẽ PSD chỉ cho các kênh đã chọn
     if selected_channels is not None:
@@ -38,10 +32,20 @@ def analysis_meg(fif_path, selected_channels=None):
         selected_picks = None  # Nếu không chỉ định, vẽ tất cả
 
     raw.plot_psd(fmin=0.1, fmax=100, tmin=0, tmax=None, picks=selected_picks, show=False)
-    plt.savefig(f'{file_name}_psd_meg_data.png')  # Lưu hình ảnh vào tệp với tên dựa trên fif_path
-    plt.close()  # Đóng hình ảnh
+    plt.savefig(f'{file_name}_psd.png')
+    plt.close()
 
-file_list = search_fif_files(r"D:\1_Work\6_MGL_MS\meg_analysis\data\aamod_meg_maxfilt_00002")
+
+
+input_file_paths = r"D:\1_Work\6_MGL_MS\meg_analysis\data\aamod_meg_maxfilt_00002"
+preproc_file_paths = r"D:\1_Work\6_MGL_MS\meg_analysis\data\preprocessed"
+
+input_files = search_fif_files(input_file_paths)
+preproc_files = search_fif_files(preproc_file_paths)
+
+if preproc_files:
+    print("Preprocessed files already exist. Do you want to overwrite them? (y/n) ")
+    overwrite = True if input().lower() in ["y", "yes"] else False
 
 config = """
     preproc:
@@ -56,14 +60,9 @@ config = """
     - bad_channels: {picks: meg}
     - interpolate_bads: {}
 """
-out_dir = r"D:\1_Work\6_MGL_MS\meg_analysis\data\preprocessed"
 output = preprocessing.run_proc_batch(
     config,
-    file_list,
-    outdir=out_dir,
-    overwrite=True,
+    input_files,
+    outdir=preproc_file_paths,
+    overwrite=overwrite,
     )
-
-preproc_list = search_fif_files(r"D:\1_Work\6_MGL_MS\meg_analysis\data\preprocessed")
-analysis_meg(file_list[0], selected_channels=5)
-analysis_meg(preproc_list[0], selected_channels=5)
