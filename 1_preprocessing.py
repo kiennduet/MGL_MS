@@ -39,7 +39,7 @@ input_file_paths = r"D:\1_Work\6_MGL_MS\meg_analysis\data\aamod_meg_maxfilt_0000
 preproc_file_paths = r"D:\1_Work\6_MGL_MS\meg_analysis\data\preprocessed"
 
 input_files = search_files(input_file_paths, '.fif')
-preproc_files = search_files(preproc_file_paths '.fif')
+preproc_files = search_files(preproc_file_paths, '.fif')
 
 if preproc_files:
     print("Preprocessed files already exist. Do you want to overwrite them? (y/n) ")
