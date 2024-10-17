@@ -2,7 +2,6 @@ import os
 import mne
 from osl import preprocessing
 import matplotlib
-matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 
 
@@ -62,5 +61,5 @@ output = preprocessing.run_proc_batch(
     config,
     input_files,
     outdir=preproc_file_paths,
-    overwrite=overwrite,
+    overwrite=False,
     )

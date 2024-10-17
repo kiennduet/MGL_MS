@@ -1,0 +1,3 @@
+[2024-10-17 14:33:29]  - INFO - osl.logger:122 : OSL osl_logger: handler 'console' level set to 'INFO'
+[2024-10-17 14:33:29]  - INFO - osl.logger:102 : logging to file: D:\1_Work\6_MGL_MS\meg_analysis\data\preprocessed/logs/osl_batch.log
+[2024-10-17 14:33:29]  - INFO - osl.batch:945 : Starting OSL Batch Processing
