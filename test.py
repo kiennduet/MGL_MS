@@ -4,7 +4,7 @@ import os
 # from dask.distributed import Client
 from osl import source_recon, utils
 import osl.source_recon as osl_sr
-osl_sr.setup_fsl(directory='/media/avitech/CODE/Kiennd/2_MGL_MS/fsl')
+osl_sr.setup_fsl(directory='/media/avitech/CODE/Kiennd/2_MGL_MS/fsl_install')
 
 
 def search_files(directory, type, sub_name=None):
