@@ -21,14 +21,13 @@ def search_files(directory, type, sub_name=None):
 # with open(setup_file) as f:
 #     code = f.read()
 #     exec(code)
-path_preproc = r"/media/avitech/MyPassport/Kien/MEG_data/1_meg_preproc"
-path_mri = r"/media/avitech/MyPassport/Kien/MEG_data/0_mri_test"
+path_preproc = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/1_meg_prepro"
+path_smri = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/0_smri"
 
 sub_nums = ['sub-CC110033']
 dir_preproc = search_files(path_preproc, type = '.fif', sub_name=sub_nums)
-dir_smri = search_files(path_mri, type= "T1.nii", sub_name=sub_nums)    
-dir_coregis = r"/media/avitech/MyPassport/Kien/MEG_data/2_meg_coregis"
-
+dir_smri = search_files(path_smri, type= "T1.nii", sub_name=sub_nums)    
+dir_coregis = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/2_meg_coregis"
 
 # (1) prepare coregistration
 # Settings
