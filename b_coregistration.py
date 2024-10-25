@@ -1,67 +1,44 @@
 import os
 from osl import source_recon, utils
+# from dask.distributed import Client
+from side_function import search_files
 
-import osl.source_recon as osl_sr
-osl_sr.setup_fsl(directory='/media/avitech/CODE/Kiennd/2_MGL_MS/fsl')
+path_preproc = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/1_meg_prepro"
+path_smri = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/0_smri"
 
-
-def search_files(directory, type, sub_name=None):
-    file_paths = []
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            if file.endswith(type):
-                if sub_name is None or any(name in file for name in sub_name):
-                    file_paths.append(os.path.join(root, file))
-    return file_paths
-
-path_preproc = r"/media/avitech/MyPassport/Kien/MEG_data/1_meg_preproc"
-path_mri = r"/media/avitech/MyPassport/Kien/MEG_data/0_mri_test"
-
-sub_nums = ['sub-CC110033']
-
+sub_nums = ['sub-CC110033', 'sub-CC110037', 'sub-CC110045', 'sub-CC110056']
 dir_preproc = search_files(path_preproc, type = '.fif', sub_name=sub_nums)
-dir_smri = search_files(path_mri, type= "T1.nii", sub_name=sub_nums)    
-dir_coregis = r"/media/avitech/MyPassport/Kien/MEG_data/2_meg_coregis"
+dir_smri = search_files(path_smri, type= "T1w.nii.gz", sub_name=sub_nums)    
+dir_coregis = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/2_meg_coregis"
 
-
-print(dir_preproc)
 print(dir_smri)
+print(dir_preproc)
 
-
+# (1) prepare coregistration
 # Settings
 config = """
     source_recon:
-    - extract_polhemus_from_info: {}  
+    - extract_polhemus_from_info: {}
     - remove_stray_headshape_points: {}
     - compute_surfaces:
         include_nose: False
     - coregister:
-        use_nose: False
+        use_nose: True
         use_headshape: True
         allow_smri_scaling: True
 """
 
-
-# config = """
-#     source_recon:
-#     - extract_polhemus_from_info: {}  
-#     - remove_stray_headshape_points: {}
-#     - compute_surfaces:
-#         include_nose: False
-#     - coregister:
-#         use_nose: False
-#         use_headshape: True
-#         allow_smri_scaling: True
-#         #n_init: 2
-# """
-
+# (2) run coregistration
 utils.logger.set_up(level="INFO")
+# client = Client(n_workers=16, threads_per_worker=1)
+
+# Run coregistration
 source_recon.run_src_batch(
     config,
     outdir=dir_coregis,
     subjects=sub_nums,
     preproc_files=dir_preproc,
     smri_files=dir_smri,
-
+    dask_client = False,
 )
 

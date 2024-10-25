@@ -3,18 +3,7 @@ import mne
 from osl import preprocessing
 import matplotlib
 import matplotlib.pyplot as plt
-
-
-
-def search_files(directory, type, sub_name=None):
-    file_paths = []
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            if file.endswith(type):
-                if sub_name is None or any(name in file for name in sub_name):
-                    file_paths.append(os.path.join(root, file))
-    return file_paths
-
+from side_function import search_files
 
 path_meg = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/0_meg"
 path_preproc = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/1_meg_prepro"
