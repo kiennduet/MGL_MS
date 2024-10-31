@@ -7,9 +7,16 @@ import os
 import shutil
 
 # Lists to store successful and failed directories
-dir_src = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/2_meg_coregis"
-dir_flipped = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/3_meg_flipped"
-sub_nums = ['sub-CC110033', 'sub-CC110037', 'sub-CC110045', 'sub-CC110056']
+dir_src = r"/media/avitech/MyPassport/Kien/MEG_data/2_meg_coregis"
+dir_flipped = r"/media/avitech/MyPassport/Kien/MEG_data/3_meg_flipped"
+sub_nums = ['sub-CC110033', 'sub-CC110037', 'sub-CC110045', 'sub-CC110056', 
+            'sub-CC110069', 'sub-CC110087', 'sub-CC110098', 'sub-CC110101', 
+            'sub-CC110126', 'sub-CC110174', 'sub-CC110182', 'sub-CC110187', 
+            'sub-CC110319', 'sub-CC110411', 'sub-CC110606', 'sub-CC112141', 
+            'sub-CC120008', 'sub-CC120049', 'sub-CC120061', 'sub-CC120065', 
+            'sub-CC120120', 'sub-CC120137', 'sub-CC120166', 'sub-CC120182', 
+            'sub-CC120184', 'sub-CC120208', 'sub-CC120212', 'sub-CC120218', 
+            'sub-CC120264', 'sub-CC120276', 'sub-CC120309', 'sub-CC120313']
 subject_directories = sub_nums
 
 successful_dirs = []
