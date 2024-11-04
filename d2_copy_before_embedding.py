@@ -1,8 +1,3 @@
-############################################
-# collate all the files
-# import os
-
-
 import os
 import shutil
 
