@@ -9,15 +9,14 @@ from osl_dynamics.data import Data
 #     code = f.read()
 #     exec(code)
 
-dir_models = r"/media/avitech/MyPassport/Kien/MEG_data/6_models"
-dir_training = r"/media/avitech/MyPassport/Kien/MEG_data/5_meg_training"
+print("\nHMM step\n")
 
+dir_training = r"/media/avitech/MyPassport/Kien/MEG_data/5_meg_training"
+dir_models = r"/media/avitech/MyPassport/Kien/MEG_data/6_models"
 
 for i in range(2201, 2202):   # Loop from 301 to 310  dir_save_model = f"/home/gnagels/Data/DPhilData/analyses/TDE-HMM_20240806a/model_{i}"
     dir_save_model = f"{dir_models}/model_{i}"
     os.makedirs(dir_save_model, exist_ok=True)
-    print(f"Running code with dir_save_model = {dir_save_model}")
-    print(f"Running code with dir_save_model = {dir_save_model}")
     print(f"Running code with dir_save_model = {dir_save_model}")
 
     # (2) load TDE prepared data for further processing

@@ -3,13 +3,14 @@ import mne
 from osl import preprocessing
 import matplotlib
 import matplotlib.pyplot as plt
-from side_function import search_files
+from side_function import search_files, get_subject_list
 
-path_meg = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/0_meg"
+path_meg = r"/media/avitech/MyPassport/Kien/MEG_data/camcan/cc700/meg/pipeline/release005/BIDSsep/derivatives_rest/aa/AA_movecomp/aamod_meg_maxfilt_00002"
 path_preproc = r"/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/1_meg_prepro"
 
-dir_meg = search_files(path_meg, '.fif')
-print(dir_meg)
+sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=[0,1])
+dir_meg,_ = search_files(directory=path_meg, file_type='.fif', sub_name=sub_nums, title="Raw MEG files")
+
 
 config = """
     preproc:

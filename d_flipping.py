@@ -1,7 +1,7 @@
 from osl import source_recon
 import pickle
 import os
-from side_function import search_files
+from side_function import search_files, get_subject_list
 
 # test after meeting with Mark on 25 Sep 2024
 # (0) define directories
@@ -18,28 +18,20 @@ from side_function import search_files
 # subject_directories = [f"{code}" for code in codes]
 # subject_directories_full = [f"{dir_src}/{code}" for code in codes]
 
-from side_function import search_files
 
 path_preproc = r"/media/avitech/MyPassport/Kien/MEG_data/1_meg_preproc"
 path_smri = r"/media/avitech/MyPassport/Kien/MEG_data/camcan/cc700/mri"
 
-sub_nums = ['sub-CC110033', 'sub-CC110037', 'sub-CC110045', 'sub-CC110056', 
-            'sub-CC110069', 'sub-CC110087', 'sub-CC110098', 'sub-CC110101', 
-            'sub-CC110126', 'sub-CC110174', 'sub-CC110182', 'sub-CC110187', 
-            'sub-CC110319', 'sub-CC110411', 'sub-CC110606', 'sub-CC112141', 
-            'sub-CC120008', 'sub-CC120049', 'sub-CC120061', 'sub-CC120065', 
-            'sub-CC120120', 'sub-CC120137', 'sub-CC120166', 'sub-CC120182', 
-            'sub-CC120184', 'sub-CC120208', 'sub-CC120212', 'sub-CC120218', 
-            'sub-CC120264', 'sub-CC120276', 'sub-CC120309', 'sub-CC120313']
+sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=1)
 
-dir_preproc = search_files(path_preproc, type = '.fif', sub_name=sub_nums)
-dir_smri = search_files(path_smri, type= "T1w.nii.gz", sub_name=sub_nums)     
+dir_preproc, sub_nums = search_files(path_preproc, file_type = '.fif', sub_name=sub_nums, title="Preprocessing files")
+dir_smri, sub_nums = search_files(path_smri, file_type = "T1w.nii.gz", sub_name=sub_nums, title="MRI files")      
+
 dir_coregis = r"/media/avitech/MyPassport/Kien/MEG_data/2_meg_coregis"
 dir_src = dir_coregis
 
 subject_directories = sub_nums
 
-# '/media/avitech/CODE/Kiennd/2_MGL_MS/MEG_data_test/2_meg_coregis/sub-CC110033/parc'
 
 # (1) Find a good template subject to match others to
 # template = source_recon.find_template_subject(dir_output, subject_directories, standardize=True)
