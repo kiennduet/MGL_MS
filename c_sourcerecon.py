@@ -10,7 +10,7 @@ from osl import source_recon, utils
 path_preproc = r"/media/avitech/MyPassport/Kien/MEG_data/1_meg_preproc"
 path_smri = r"/media/avitech/MyPassport/Kien/MEG_data/camcan/cc700/mri"
 
-sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=1)
+sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=0)
 print(f"Preprocessing {len(sub_nums)} subjects ...")
 
 
@@ -25,7 +25,7 @@ config = """
     - forward_model:
         model: Single Layer
     - beamform_and_parcellate:
-        freq_range: [0.5, 45] o
+        freq_range: [0.5, 45]
         chantypes: [mag, grad]
         rank: {meg: 60}
         parcellation_file: /media/avitech/MyPassport/Kien/MEG_data/0_sample_file/Glasser52_binary_space-MNI152NLin6_res-8x8x8_8mm.nii.gz

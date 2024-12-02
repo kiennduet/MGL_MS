@@ -6,7 +6,7 @@ from side_function import search_files, search_subnums, get_subject_list
 path_preproc = r"/media/avitech/MyPassport/Kien/MEG_data/1_meg_preproc"
 path_smri = r"/media/avitech/MyPassport/Kien/MEG_data/camcan/cc700/mri"
 
-sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=1)
+sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=0)
 
 dir_preproc, sub_nums = search_files(path_preproc, file_type = '.fif', sub_name=sub_nums, title="Preprocessing files")
 dir_smri, sub_nums= search_files(path_smri, file_type = "T1w.nii.gz", sub_name=sub_nums, title="MRI files")    

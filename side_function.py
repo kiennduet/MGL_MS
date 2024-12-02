@@ -79,6 +79,7 @@ def search_subnums(directory, prefix="sub", separator="-", id_length=8):
         if match:
             subnums.append(match.group())
 
+    print(f"\nNumber of subject codes found: {len(subnums)}\n")
     return subnums
 
 
@@ -103,4 +104,5 @@ def get_subject_list(file_path, data_type=1):
     else:
         selected_subjects = data[data['data_collection'] == data_type]['participant_id'].tolist()
 
+    print(f"\nNumber of subjects found: {len(selected_subjects)}\n")
     return selected_subjects

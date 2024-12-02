@@ -12,7 +12,7 @@ from side_function import search_files, get_subject_list
 
 # # (0) file locations
 dir_flipped = r"/media/avitech/MyPassport/Kien/MEG_data/3_meg_flipped"
-sub_nums = sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=1)
+sub_nums = sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=[0,1])
 _, sub_nums = search_files(dir_flipped , file_type = '.fif', sub_name=sub_nums, title="Flipped files")
 
 dir_before_pca = r"/media/avitech/MyPassport/Kien/MEG_data/4_meg_embedded"

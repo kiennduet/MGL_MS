@@ -7,7 +7,7 @@ from side_function import search_files, get_subject_list
 dir_src = r"/media/avitech/MyPassport/Kien/MEG_data/2_meg_coregis"
 dir_flipped = r"/media/avitech/MyPassport/Kien/MEG_data/3_meg_flipped"
 
-sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=1)
+sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=[0,1])
 _, sub_nums = search_files(dir_src , file_type = '.fif', sub_name=sub_nums, title="Flipped files")
 
 subject_directories = sub_nums
