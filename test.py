@@ -1,62 +1,52 @@
 import os
-import numpy as np
 from osl_dynamics.data import Data
-from osl_dynamics.models import load
-from osl_dynamics.inference import modes
-import pandas as pd
+from osl_dynamics.models.hmm import Config, Model
 
-# (0) Định nghĩa các thư mục
-dir_models = r"/media/avitech/MyPassport/Kien/MEG_data/6_models"
+# (1) Định nghĩa các thư mục
 dir_training = r"/media/avitech/MyPassport/Kien/MEG_data/5_meg_training"
-dir_output = r"/media/avitech/MyPassport/Kien/MEG_data/features"  # Thư mục lưu đặc trưng
+dir_models = r"/media/avitech/MyPassport/Kien/MEG_data/7_models_full"
+os.makedirs(dir_models, exist_ok=True)
 
-# Đảm bảo thư mục lưu đặc trưng tồn tại
-os.makedirs(dir_output, exist_ok=True)
+# Liệt kê các tệp dữ liệu
+files = [os.path.join(dir_training, f) for f in os.listdir(dir_training)]
 
-# Xác định số mô hình cần phân tích
-i_model_number = 2201  # Số mô hình bạn muốn xử lý
-dir_model = f"{dir_models}/model_{i_model_number}"
+# Chia nhỏ các tệp dữ liệu thành batch (ví dụ: 10 tệp mỗi batch)
+batch_size = 130
+batches = [files[i:i + batch_size] for i in range(0, len(files), batch_size)]
 
-# Load model và dữ liệu
-model = load(dir_model)
-data = Data(dir_training, picks="misc", reject_by_annotation="omit")
+# (2) Cấu hình mô hình HMM
+config = Config(
+    n_states=6,
+    n_channels=120,
+    sequence_length=1000,
+    learn_means=False,
+    learn_covariances=True,
+    batch_size=16,
+    learning_rate=0.01,
+    n_epochs=15,  # Huấn luyện 5 epoch mỗi batch
+)
 
-# Lấy giá trị alpha (state probability time courses)
-alpha = model.get_alpha(data)
+# (3) Khởi tạo mô hình
+model = Model(config)
 
-# (1) Tính `stc` (State Time Course)
-stc = modes.argmax_time_courses(alpha)
+# Huấn luyện theo từng batch
+for i, batch in enumerate(batches):
+    print(f"Đang huấn luyện trên batch {i+1}/{len(batches)}...")
+    
+    # Load dữ liệu của batch
+    data = Data(batch)
+    
+    # Nếu đây là batch đầu tiên, thực hiện khởi tạo mô hình
+    if i == 0:
+        model.random_state_time_course_initialization(data, n_epochs=1, n_init=3)
+    
+    # Huấn luyện mô hình trên batch
+    history = model.fit(data)
 
-# (2) Tính `fo` (Fractional Occupancies)
-fo = modes.fractional_occupancies(stc)
+    # Lưu mô hình sau mỗi batch
+    model.save(os.path.join(dir_models, f"model_batch_{i+1}"))
 
-# (3) Tính `mlt` (Mean Lifetimes)
-sampling_frequency = 250  # Tần số lấy mẫu (Hz)
-mlt = modes.mean_lifetimes(stc, sampling_frequency=sampling_frequency)
-
-# In thông tin cơ bản
-print(f"Đã tính toán xong các đặc trưng:")
-print(f"STC Shape: {stc.shape}")
-print(f"FO Shape: {fo.shape}")
-print(f"MLT Shape: {mlt.shape}")
-
-# Chuyển các đặc trưng sang DataFrame và lưu dưới dạng CSV
-stc_df = pd.DataFrame(stc)
-fo_df = pd.DataFrame(fo, columns=[f"State_{i}" for i in range(fo.shape[1])])
-mlt_df = pd.DataFrame(mlt, columns=[f"State_{i}" for i in range(mlt.shape[1])])
-
-# Định nghĩa đường dẫn lưu file
-stc_csv_path = os.path.join(dir_output, f"stc_model_{i_model_number}.csv")
-fo_csv_path = os.path.join(dir_output, f"fo_model_{i_model_number}.csv")
-mlt_csv_path = os.path.join(dir_output, f"mlt_model_{i_model_number}.csv")
-
-# Lưu vào tệp CSV
-stc_df.to_csv(stc_csv_path, index=False)
-fo_df.to_csv(fo_csv_path, index=False)
-mlt_df.to_csv(mlt_csv_path, index=False)
-
-print("\nĐã lưu các đặc trưng vào CSV:")
-print(f"STC được lưu tại: {stc_csv_path}")
-print(f"FO được lưu tại: {fo_csv_path}")
-print(f"MLT được lưu tại: {mlt_csv_path}")
-
+# Lưu mô hình cuối cùng
+final_model_path = os.path.join(dir_models, "final_model")
+model.save(final_model_path)
+print(f"Đã lưu mô hình cuối cùng tại {final_model_path}")

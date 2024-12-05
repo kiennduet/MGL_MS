@@ -20,7 +20,13 @@ for i in range(2201, 2202):   # Loop from 301 to 310  dir_save_model = f"/home/g
     print(f"Running code with dir_save_model = {dir_save_model}")
 
     # (2) load TDE prepared data for further processing
+    # data = Data(dir_training,
+    #             n_batches=10,  # Sử dụng 10 batch để giảm tải RAM
+    #             standardize=True  # Chuẩn hóa dữ liệu khi load từng batch
+    # )
+
     data = Data(dir_training)
+    data.prepare(n_batches=10) 
 
     # (3) define and run TDE HMM model
     from osl_dynamics.models.hmm import Config
@@ -31,10 +37,11 @@ for i in range(2201, 2202):   # Loop from 301 to 310  dir_save_model = f"/home/g
         sequence_length=1000,
         learn_means=False,
         learn_covariances=True,
-        batch_size=16,
+        batch_size=16, #16
         learning_rate=0.01,
-        n_epochs=20,
+        n_epochs=20, #20
     )
+
     from osl_dynamics.models.hmm import Model
 
     model = Model(config)
