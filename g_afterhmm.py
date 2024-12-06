@@ -3,6 +3,7 @@ import platform
 from osl_dynamics.data import Data
 from osl_dynamics.models import load
 import pickle
+import numpy as np
 from itertools import chain
 import matplotlib.pyplot as plt
 
@@ -19,12 +20,12 @@ import matplotlib.pyplot as plt
 
 print("\nPlotting graphs to analyze the results \n")
 
-dir_models = r"/media/avitech/MyPassport/Kien/MEG_data/6_models"
+# dir_models = r"/media/avitech/MyPassport/Kien/MEG_data/6_models"
+dir_models = "/media/avitech/MyPassport/Kien/MEG_data/7_models_full"
 dir_training = r"/media/avitech/MyPassport/Kien/MEG_data/5_meg_training"
 dir_before_pca = r"/media/avitech/MyPassport/Kien/MEG_data/4_meg_embedded"
 
 for i_model_number in range(2201, 2202):  
-
 
 # # Define both ranges and chain them together
 # for i_model_number in chain(range(301, 311), range(401, 411), range(501, 511)):
@@ -42,13 +43,13 @@ for i_model_number in range(2201, 2202):
     model = load(dir_model)
     data = Data(dir_training, picks="misc", reject_by_annotation="omit")
     alpha = model.get_alpha(data)
+    pickle.dump(alpha, open(dir_model + "/results/data/alpha.pkl", "wb"))
 
     original_data = data.time_series(prepared=False)
     prepared_data = data.time_series()
     data_realigned = model.get_training_time_series(data, prepared=False)
     data_before_pca = Data(dir_before_pca)
     data_before_pca_trimmed = data_before_pca.trim_time_series(n_embeddings=15, sequence_length=1000)
-    pickle.dump(alpha, open(dir_model + "/results/data/alpha.pkl", "wb"))
 
     from osl_dynamics.analysis import spectral
     f, psd, coh = spectral.multitaper_spectra(
@@ -61,16 +62,12 @@ for i_model_number in range(2201, 2202):
         n_jobs=16,
     )
 
-    import numpy as np
+
     np.save(dir_model + "/results/data/f.npy", f)
     np.save(dir_model + "/results/data/psd.npy", psd)
     np.save(dir_model + "/results/data/coh.npy", coh)
     #
-    # # read alpha if we already have it
-    # import pickle
-    # # alpha = pickle.load(open(f"{dir_model}/results/data/alpha.pkl", "rb"))
-    #
-    #
+
     # Plot the state probability time course for the first subject (8 seconds)
     from osl_dynamics.utils import plotting
     import matplotlib.pyplot as plt
