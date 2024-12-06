@@ -82,7 +82,7 @@ config = Config(
     learn_covariances=True,
     batch_size=16,
     learning_rate=0.01,
-    n_epochs=10,  # Huấn luyện 5 epoch mỗi batch
+    n_epochs=10,
 )
 
 # (3) Khởi tạo mô hình

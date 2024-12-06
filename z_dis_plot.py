@@ -13,7 +13,7 @@ data = pd.read_csv(file_path, sep='\t')
 path_preproc = r"/media/avitech/MyPassport/Kien/MEG_data/1_meg_preproc"
 path_smri = r"/media/avitech/MyPassport/Kien/MEG_data/camcan/cc700/mri"
 
-sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=1)
+sub_nums = get_subject_list(file_path=r"/media/avitech/My Passport/Kien/MEG_data/updated_participants.tsv", data_type=[1])
 print(f"Preprocessing {len(sub_nums)} subjects ...")
 
 
