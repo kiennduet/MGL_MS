@@ -170,3 +170,83 @@ def search_files_v2(directory, file_type, sub_name=None, title=None):
     print("______________________________")
 
     return matched_files, updated_subs
+
+def search_files_v3(directory, file_type, sub_name=None, title=None):
+    """
+    Search for files in a directory that match a list of subjects (sub_name) 
+    and report missing and extra subjects.
+
+    Args:
+        directory (str): Path to the directory to search.
+        file_type (str): File type to search for (e.g., ".tsv", ".csv").
+        sub_name (list or None): List of subjects to search for (default is None, meaning no filtering).
+        title (str or None): Title for logging, default is None.
+
+    Returns:
+        tuple: (List of matching files, List of missing subjects, Updated list of subjects, List of extra subjects).
+    """
+    print("_______________________________________________________")
+    print(f"\n{title}")
+    if sub_name:
+        print(f"\nNumber of input subjects: {len(sub_name)} subjects")
+    else:
+        print("\nDo not have input sub_name list")
+
+    exist_files = []
+    matched_files = []  # List to store paths of matching files
+    missing_subs = set(sub_name) if sub_name else set()  # Set of subjects not yet found
+    extra_subs = set()  # Set to store extra subjects in directory
+
+    # Walk through the directory tree
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            # Check if the file has the specified type
+            if file.endswith(file_type):
+                file_path = os.path.join(root, file)
+                exist_files.append(file_path)
+                file_name = os.path.basename(file)
+                
+                if sub_name:
+                    # Check if the file matches any subject in sub_name
+                    matched = False
+                    for sub in sub_name:
+                        if sub in file_name:  # Match subject name in file
+                            matched_files.append(file_path)  # Add matching file to the list
+                            missing_subs.discard(sub)  # Remove found subject from missing_subs
+                            matched = True
+                            break
+                    
+                    # If the file does not match any input subject, add it to extra_subs
+                    if not matched:
+                        extra_subs.add(file_name.split('.')[0])  # Add subject ID (without extension)
+
+                else:
+                    # If no sub_name is provided, add all files of the specified type
+                    matched_files.append(file_path)
+
+    # Report existing files
+    print(f"\nExist subjects in folder ({file_type}): {len(exist_files)} files")
+    # Report matched files
+    print(f"\nMatched subjects ({file_type}): {len(matched_files)} files")
+
+    # Report missing subjects
+    if sub_name and missing_subs:
+        print(f"\nMissing subjects ({file_type}): {len(missing_subs)} subjects")
+        for sub in sorted(missing_subs):
+            print(sub)
+    else:
+        missing_subs = set()
+
+    # Report extra subjects
+    if extra_subs:
+        print(f"\nExtra subjects in directory ({file_type}): {len(extra_subs)} subjects")
+        for sub in sorted(extra_subs):
+            print(sub)
+
+    # Update sub_name by excluding missing subjects
+    updated_subs = [sub for sub in sub_name if sub not in missing_subs] if sub_name else None
+    print(f"\nUpdated subjects ({file_type}): {len(updated_subs) if updated_subs else 0} subjects")
+
+    print("______________________________")
+
+    return matched_files, updated_subs
