@@ -28,4 +28,7 @@ plt.xlabel('Age', fontsize=14)
 plt.ylabel('Frequency', fontsize=14)
 plt.legend()
 plt.grid(axis='y', linestyle='--', alpha=0.7)
-plt.show()
+# plt.show()
+
+output_path = f'images/age_dis_{len(sub_nums)}.png'
+plt.savefig(output_path, dpi=300, bbox_inches='tight')
